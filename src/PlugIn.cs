@@ -86,7 +86,7 @@ namespace Landis.Extension.LinearWind
             //log.WriteLine("Time,Initiation Site,Total Sites,Damaged Sites,Cohorts Killed,Mean Severity");
         }
         //---------------------------------------------------------------------
-        public new void InitializePhase2()
+        public override void InitializePhase2()
         {
             SiteVars.ReInitialize();
             reinitialized = true;
