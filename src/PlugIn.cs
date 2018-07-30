@@ -1,5 +1,4 @@
-//  Copyright 2005-2010 Portland State University, University of Wisconsin
-//  Authors:  Robert M. Scheller, James B. Domingo
+//  Contributors:  Eric Gustafson, Robert M. Scheller, James B. Domingo
 
 using Landis.SpatialModeling;
 using Landis.Core;
@@ -24,8 +23,7 @@ namespace Landis.Extension.LinearWind
         
         private string mapNameTemplate;
         private string intensityMapNameTemplate;
-        private string tolwMapNameTemplate;
-        //private StreamWriter log;
+        //private string tolwMapNameTemplate;
         private IInputParameters parameters;
         private static ICore modelCore;
         private bool reinitialized;
@@ -74,7 +72,7 @@ namespace Landis.Extension.LinearWind
             Timestep = parameters.Timestep;
             mapNameTemplate = parameters.MapNamesTemplate;
             intensityMapNameTemplate = parameters.IntensityMapNamesTemplate;
-            tolwMapNameTemplate = "linearwind/tolw-{timestep}.img";
+            //tolwMapNameTemplate = "linearwind/tolw-{timestep}.img";
 
             SiteVars.Initialize();
 
