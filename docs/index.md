@@ -4,7 +4,7 @@ The Linear Wind extension generates linear wind events such as tornadoes and der
 
 # Release Notes
 
-- Latest release: Version 2.0 — September 2018
+- Latest release: Version 2.0, September 2018
 - [View User Guide](https://github.com/LANDIS-II-Foundation/Extension-LinearWind/blob/master/docs/LANDIS-II%20Linear%20Wind%20v2.0%20User%20Guide.pdf).
 
 - Full release details found in the User Guide and on GitHub.
