@@ -20,13 +20,13 @@ To use Linear Wind, you need:
 
 # Download
 
-- The latest version of Linear Wind can be [downloaded from GitHub](https://github.com/LANDIS-II-Foundation/Extension-Dynamic-Fire-System/blob/master/deploy/installer/LANDIS-II-V7%20Dynamic%20Fire%20System%203.0-setup.exe). To install it on your computer, launch the installer.
+- The latest version of Linear Wind can be [downloaded from GitHub](https://github.com/LANDIS-II-Foundation/Extension-LinearWind/blob/master/deploy/installer/LANDIS-II-V7%20Linear%20Wind%202.0-setup.exe). To install it on your computer, launch the installer.
 
 # Example Files
 
 LANDIS-II requires a global parameter file for your scenario, and separate parameter files for each extension.
 
-Example files can be [downloaded from GitHub](https://github.com/LANDIS-II-Foundation/Extension-LinearWind/blob/master/testing/Core7-LinearWind2.0/linear-wind-example.zip).
+Example files can be [downloaded from GitHub](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-LinearWind/blob/master/testing/Core7-LinearWind2.0).
 
 # Citation
 
