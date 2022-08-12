@@ -25,6 +25,9 @@ namespace Landis.Extension.LinearWind
         private double intensity;
         private int windDirection;
         private double propIntensityVar;
+        private float maxDistanceToEdge;
+        private float maxAgeEdge;
+        private float maxEdgeEffect;
 
         private double sizeHectares;
         private int sitesInEvent;
@@ -93,6 +96,30 @@ namespace Landis.Extension.LinearWind
                 return propIntensityVar;
             }
         }
+        //---------------------------------------------------------------------
+        /*public float MaxDistanceToEdge
+        {
+            get
+            {
+                return maxDistanceToEdge;
+            }
+        }
+        //---------------------------------------------------------------------
+        public float MaxAgeEdge
+        {
+            get
+            {
+                return maxAgeEdge;
+            }
+        }
+        //---------------------------------------------------------------------
+        public float MaxEdgeEffect
+        {
+            get
+            {
+                return maxEdgeEffect;
+            }
+        }*/
         //---------------------------------------------------------------------
         public int WindDirection
         {
@@ -211,7 +238,7 @@ namespace Landis.Extension.LinearWind
                 double eventIntensity = GetWindIntensity(windIntPct);
 
                 Event windEvent = new Event(site, eventLength, eventWidth, eventDirection, parameters.PropIntensityVar, eventIntensity, eventTornado);
-                windEvent.Spread(PlugIn.ModelCore.CurrentTime, parameters.EcoParameters);
+                windEvent.Spread(PlugIn.ModelCore.CurrentTime, parameters);
                 return windEvent;
             }
             else
@@ -269,7 +296,7 @@ namespace Landis.Extension.LinearWind
 
         //---------------------------------------------------------------------
 
-        private void Spread(int currentTime, IEcoParameters[] ecoParameters)
+        private void Spread(int currentTime, IInputParameters parameters)
         {
             // Future implementation to incorporate spatial autocorellation of intensity variability
             // Grow the event along the axis line, using autocorellation to apply the intensity variability
@@ -277,6 +304,8 @@ namespace Landis.Extension.LinearWind
             // Calculate minimum distance to the axis, and get the intensity value for the nearest cell on the axis
             // Use the nearest cell's intensity as the maximum intensity for the target cell, and then apply ecoregion and distance modifiers of intensity
             // Also apply intensity variability to target cells?
+
+            IEcoParameters[] ecoParameters = parameters.EcoParameters;
 
             long totalSiteSeverities = 0;
 
@@ -319,48 +348,112 @@ namespace Landis.Extension.LinearWind
                         double dy = y - siteY;
                         double minDistance = Math.Sqrt(dx * dx + dy * dy);
 
-                        if (minDistance <= radiusCells)
+                    if (minDistance <= radiusCells)
+                    {
+                        currentSite = site;
+                        this.sitesInEvent++;
+                        double intensitySlope = -1.0 / radiusCells;
+                        double intensityInt = 1.0;
+                        siteIntensity = (intensitySlope * minDistance + intensityInt) * this.Intensity;
+                        if (PlugIn.ModelCore.GenerateUniform() <= this.PropIntensityVar)
                         {
-                            currentSite = site;
-                            this.sitesInEvent++;
-                            double intensitySlope = -1.0 / radiusCells;
-                            double intensityInt = 1.0;
-                            siteIntensity = (intensitySlope * minDistance + intensityInt) * this.Intensity;
-                            if (PlugIn.ModelCore.GenerateUniform() <= this.PropIntensityVar)
-                            {
-                                siteIntensity -= 0.20;
-                            }
-                            IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
-                            double ecoModifier = ecoParameters[ecoregion.Index].EcoModifier;
-                            siteIntensity += ecoModifier;
-
-                            // Limit site intensity to 0-1
-                            siteIntensity = Math.Max(siteIntensity, 0);
-                            siteIntensity = Math.Min(siteIntensity, 1);
-
-                            if (siteIntensity > SiteVars.Intensity[site])
-                            {
-                                SiteVars.Intensity[site] = siteIntensity;
-
-                                KillSiteCohorts(site);
-                                if (siteSeverity > 0)
-                                {
-                                    SiteVars.Event[site] = this;
-                                    this.sitesDamaged++;
-                                    totalSiteSeverities += siteSeverity;
-                                    //UI.WriteLine("  site severity: {0}", siteSeverity);
-                                    SiteVars.Disturbed[site] = true;
-                                    SiteVars.TimeOfLastEvent[site] = currentTime;
-                                    // SiteVars.LastSeverity[site] = siteSeverity;
-                                }
-                                if (siteSeverity > SiteVars.Severity[site])
-                                {
-                                    SiteVars.Severity[site] = siteSeverity;
-                                }
-
-                            }
+                            siteIntensity -= 0.20;
                         }
-                    
+
+                        //Apply ecoregion modifier
+                        IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
+                        double ecoModifier = ecoParameters[ecoregion.Index].EcoModifier;
+                        siteIntensity += ecoModifier;
+
+                        //Apply edge modifier
+                        float edgeModifier = 0;
+                       
+                        if (parameters.MaxDistanceToEdge > 0)
+                        {
+                            int openCellCount = 0;
+                            int neighborCellCount = 0;
+                            float edgeCellRadius = parameters.MaxDistanceToEdge / PlugIn.ModelCore.CellLength;
+                            for(int row = (int)(-1*edgeCellRadius);row<=edgeCellRadius;row++)
+                            {
+                                for (int col = (int)(-1 * edgeCellRadius); col <= edgeCellRadius; col++)
+                                {
+                                    if (!(row == 0 && col == 0))
+                                    {
+                                        double edgeSiteDistance = Math.Sqrt(Math.Pow(Math.Abs(row), 2) + Math.Pow(Math.Abs(col), 2));
+                                        if (edgeSiteDistance <= edgeCellRadius)
+                                        {
+                                            RelativeLocation relativeLoc = new RelativeLocation(row, col);
+                                            Site neighbor = site.GetNeighbor(relativeLoc);
+                                            if (neighbor.Landscape != null)
+                                            {
+                                                neighborCellCount++;
+                                                if (neighbor.IsActive)
+                                                {
+                                                    int maxCohortAge = 0;
+                                                    foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[neighbor])
+                                                    {
+                                                        foreach (ICohort c in speciesCohorts)
+                                                        {
+                                                            int cohortAge = c.Age;
+                                                            if (cohortAge > maxCohortAge)
+                                                            {
+                                                                maxCohortAge = cohortAge;
+                                                            }
+                                                            if (maxCohortAge > parameters.MaxAgeEdge)
+                                                                break;
+                                                        }
+                                                        if (maxCohortAge > parameters.MaxAgeEdge)
+                                                            break;
+                                                    }
+                                                    if (maxCohortAge <= parameters.MaxAgeEdge)
+                                                        openCellCount++;
+                                                }
+                                                else
+                                                {
+                                                    openCellCount++;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if(neighborCellCount > 0)
+                            {
+                                edgeModifier = ((float)openCellCount / (float)neighborCellCount) * parameters.MaxEdgeEffect;
+                            }                            
+                        }
+                        siteIntensity += edgeModifier;
+                        SiteVars.EdgeModifer[site] = edgeModifier;
+
+                        // Limit site intensity to 0-1
+                        siteIntensity = Math.Max(siteIntensity, 0);
+                        siteIntensity = Math.Min(siteIntensity, 1);
+
+                        if (siteIntensity > SiteVars.Intensity[site])
+                        {
+                            SiteVars.Intensity[site] = siteIntensity;
+                        }
+                    }
+                }
+            }
+            foreach (ActiveSite site in PlugIn.ModelCore.Landscape.ActiveSites)
+            {
+                siteIntensity = SiteVars.Intensity[site];
+                siteSeverity = 0;
+                KillSiteCohorts(site);
+                if (siteSeverity > 0)
+                {
+                    SiteVars.Event[site] = this;
+                    this.sitesDamaged++;
+                    totalSiteSeverities += siteSeverity;
+                    //UI.WriteLine("  site severity: {0}", siteSeverity);
+                    SiteVars.Disturbed[site] = true;
+                    SiteVars.TimeOfLastEvent[site] = currentTime;
+                    // SiteVars.LastSeverity[site] = siteSeverity;
+                }
+                if (siteSeverity > SiteVars.Severity[site])
+                {
+                    SiteVars.Severity[site] = siteSeverity;
                 }
             }
             if (sitesDamaged == 0)

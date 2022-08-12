@@ -38,6 +38,7 @@ namespace Landis.Extension.LinearWind
 
             const string WindSeverities = "WindSeverities";
             const string EcoregionTable = "EcoregionModifiers";
+            const string ForestEdgeTable = "ForestEdgeModifier";
 
             ReadLandisDataVar();
 
@@ -172,7 +173,7 @@ namespace Landis.Extension.LinearWind
                 Dictionary<string, int> lineNumbers = new Dictionary<string, int>();
 
 
-                while (!AtEndOfInput && CurrentName != WindSeverities)
+                while (!AtEndOfInput && CurrentName != ForestEdgeTable && CurrentName != WindSeverities)
                 {
                     StringReader currentLine = new StringReader(CurrentLine);
 
@@ -200,6 +201,23 @@ namespace Landis.Extension.LinearWind
                     GetNextLine();
                 }
             }
+            if (CurrentName == ForestEdgeTable)  //Edge modifiers are optional
+            {
+                //--------- Read In Edge Modifer Table ---------------------------------------
+                ReadName(ForestEdgeTable);
+                PlugIn.ModelCore.UI.WriteLine("Begin parsing ForestEdgeModifier table.");
+
+                InputVar<float> maxDistanceToEdge = new InputVar<float>("MaxDistanceToEdge");
+                InputVar<float> maxAgeEdge = new InputVar<float>("MaxAgeEdge");
+                InputVar<float> maxEdgeEffect = new InputVar<float>("MaxEdgeEffect");
+
+                ReadVar(maxDistanceToEdge);
+                parameters.MaxDistanceToEdge = maxDistanceToEdge.Value;
+                ReadVar(maxAgeEdge);
+                parameters.MaxAgeEdge = maxAgeEdge.Value;
+                ReadVar(maxEdgeEffect);
+                parameters.MaxEdgeEffect = maxEdgeEffect.Value;
+            }
             //  Read table of wind severities.
             //  Severities are in decreasing order.
             ReadName(WindSeverities);
@@ -209,14 +227,15 @@ namespace Landis.Extension.LinearWind
             InputVar<Percentage> maxAge = new InputVar<Percentage>("Max Age");
             InputVar<float> mortalityThreshold = new InputVar<float>("Mortality Threshold");
 
-            
+
+            const string EdgeMapNames = "EdgeMapNames";
             const string IntensityMapNames = "IntensityMapNames";
             const string SeverityMapNames = "SeverityMapNames";
             const string LogFile = "LogFile";
             byte previousNumber = 6;
             Percentage previousMaxAge = null;
 
-            while (!AtEndOfInput && CurrentName != SeverityMapNames && CurrentName != IntensityMapNames && CurrentName != LogFile && previousNumber != 1)
+            while (!AtEndOfInput && CurrentName != EdgeMapNames && CurrentName != SeverityMapNames && CurrentName != IntensityMapNames && CurrentName != LogFile && previousNumber != 1)
             {
                 StringReader currentLine = new StringReader(CurrentLine);
 
@@ -287,6 +306,11 @@ namespace Landis.Extension.LinearWind
             if (previousNumber != 1)
                 throw NewParseException("Expected wind severity {0}", previousNumber - 1);
 
+            InputVar<string> edgeMapNames = new InputVar<string>(EdgeMapNames);
+            if (ReadOptionalVar(edgeMapNames))
+            {
+                parameters.EdgeMapNamesTemplate = edgeMapNames.Value;
+            }
 
             InputVar<string> intensityMapNames = new InputVar<string>(IntensityMapNames);
             if (ReadOptionalVar(intensityMapNames))

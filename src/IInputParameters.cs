@@ -45,13 +45,21 @@ namespace Landis.Extension.LinearWind
             get;
             set;
         }
-
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Template for the filenames for edge modifier output maps.
+        /// </summary>
+        string EdgeMapNamesTemplate
+        {
+            get;
+            set;
+        }
         //---------------------------------------------------------------------
 
-		/// <summary>
-		/// Name of log file.
-		/// </summary>
-		string LogFileName
+        /// <summary>
+        /// Name of log file.
+        /// </summary>
+        string LogFileName
 		{
 			get;set;
 		}
@@ -142,6 +150,33 @@ namespace Landis.Extension.LinearWind
         /// Proportion of event with reduced intensity
         /// </summary>
         double PropIntensityVar
+        {
+            get;
+            set;
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Max distance to edge
+        /// </summary>
+        float MaxDistanceToEdge
+        {
+            get;
+            set;
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Max age of edge
+        /// </summary>
+        float MaxAgeEdge
+        {
+            get;
+            set;
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Max edge effect
+        /// </summary>
+        float MaxEdgeEffect
         {
             get;
             set;

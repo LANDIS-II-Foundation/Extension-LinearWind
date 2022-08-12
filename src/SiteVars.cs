@@ -15,6 +15,7 @@ namespace Landis.Extension.LinearWind
         private static ISiteVar<bool> disturbed;
         private static ISiteVar<ISiteCohorts> cohorts;
         private static ISiteVar<double> intensity;
+        private static ISiteVar<float> edgeModifier;
 
         //---------------------------------------------------------------------
 
@@ -38,6 +39,7 @@ namespace Landis.Extension.LinearWind
             }
 
             intensity = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            edgeModifier = PlugIn.ModelCore.Landscape.NewSiteVar<float>();
             
             
         }
@@ -99,13 +101,20 @@ namespace Landis.Extension.LinearWind
             }
         }
         //---------------------------------------------------------------------
-
         public static ISiteVar<double> Intensity
         {
             get
             {
                 return intensity;
             }
-        } 
+        }
+        //---------------------------------------------------------------------
+        public static ISiteVar<float> EdgeModifer
+        {
+            get
+            {
+                return edgeModifier;
+            }
+        }
     }
 }

@@ -30,12 +30,15 @@ namespace Landis.Extension.LinearWind
         private double propIntensityVar;        
         private List<double> windDirPct;
         private IEcoParameters[] ecoParameters;
-		//private IEventParameters[] eventParameters;
-        
+        //private IEventParameters[] eventParameters;
+        private float maxDistanceToEdge;
+        private float maxAgeEdge;
+        private float maxEdgeEffect;
         private List<ISeverity> severities;
 
         private string mapNamesTemplate;
         private string intensityMapNamesTemplate;
+        private string edgeMapNamesTemplate;
         private string logFileName;
 
 		//---------------------------------------------------------------------
@@ -295,25 +298,64 @@ namespace Landis.Extension.LinearWind
             }
         }
         //---------------------------------------------------------------------
-		/*
         /// <summary>
-		/// Wind event parameters for each ecoregion.
-		/// </summary>
-		/// <remarks>
-		/// Use Ecoregion.Index property to index this array.
-		/// </remarks>
-		public IEventParameters[] EventParameters
-		{
-			get {
-				return eventParameters;
-			}
-		}
-         * */
-		//---------------------------------------------------------------------
-		/// <summary>
-		/// Definitions of wind severities.
-		/// </summary>
-		public List<ISeverity> WindSeverities
+        /// Maximum distance to consider edge effect
+        /// </summary>
+        public float MaxDistanceToEdge
+        {
+            get
+            {
+                return maxDistanceToEdge;
+            }
+            set
+            {
+                if (value <= 0)
+                    throw new InputValueException(value.ToString(),
+                                                  "Value must be > 0.");
+                maxDistanceToEdge = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Maximum age to consider edge effect
+        /// </summary>
+        public float MaxAgeEdge
+        {
+            get
+            {
+                return maxAgeEdge;
+            }
+            set
+            {
+                if (value <= 0)
+                    throw new InputValueException(value.ToString(),
+                                                  "Value must be > 0.");
+                maxAgeEdge = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Maximum edge effect
+        /// </summary>
+        public float MaxEdgeEffect
+        {
+            get
+            {
+                return maxEdgeEffect;
+            }
+            set
+            {
+                if (value <= 0)
+                    throw new InputValueException(value.ToString(),
+                                                  "Value must be > 0.");
+                maxEdgeEffect = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Definitions of wind severities.
+        /// </summary>
+        public List<ISeverity> WindSeverities
 		{
 			get {
 				return severities;
@@ -349,11 +391,27 @@ namespace Landis.Extension.LinearWind
                 intensityMapNamesTemplate = value;
             }
         }
-		//---------------------------------------------------------------------
-		/// <summary>
-		/// Name of log file.
-		/// </summary>
-		public string LogFileName
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Template for the filenames for edge modifer output maps.
+        /// </summary>
+        public string EdgeMapNamesTemplate
+        {
+            get
+            {
+                return edgeMapNamesTemplate;
+            }
+            set
+            {
+                MapNames.CheckTemplateVars(value);
+                edgeMapNamesTemplate = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Name of log file.
+        /// </summary>
+        public string LogFileName
 		{
 			get {
 				return logFileName;

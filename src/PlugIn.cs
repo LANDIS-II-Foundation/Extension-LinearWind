@@ -23,6 +23,7 @@ namespace Landis.Extension.LinearWind
         
         private string mapNameTemplate;
         private string intensityMapNameTemplate;
+        private string edgeMapNameTemplate;
         //private string tolwMapNameTemplate;
         private IInputParameters parameters;
         private static ICore modelCore;
@@ -72,6 +73,7 @@ namespace Landis.Extension.LinearWind
             Timestep = parameters.Timestep;
             mapNameTemplate = parameters.MapNamesTemplate;
             intensityMapNameTemplate = parameters.IntensityMapNamesTemplate;
+            edgeMapNameTemplate = parameters.EdgeMapNamesTemplate;
             //tolwMapNameTemplate = "linearwind/tolw-{timestep}.img";
 
             SiteVars.Initialize();
@@ -104,6 +106,7 @@ namespace Landis.Extension.LinearWind
             SiteVars.Event.SiteValues = null;
             SiteVars.Severity.ActiveSiteValues = 0;
             SiteVars.Intensity.ActiveSiteValues = 0;
+            SiteVars.EdgeModifer.ActiveSiteValues = 0;
 
             int eventCount = 0;
 
@@ -172,6 +175,29 @@ namespace Landis.Extension.LinearWind
                         if (site.IsActive)
                         {
                             pixel.MapCode.Value = (int)(SiteVars.Intensity[site] * 100);
+
+                        }
+                        else
+                        {
+                            //  Inactive site
+                            pixel.MapCode.Value = 0;
+                        }
+                        outputRaster.WriteBufferPixel();
+                    }
+                }
+            }
+            //  Write edge modifer map
+            if (edgeMapNameTemplate != null)
+            {
+                path = MapNames.ReplaceTemplateVars(edgeMapNameTemplate, ModelCore.CurrentTime);
+                using (IOutputRaster<FloatPixel> outputRaster = ModelCore.CreateRaster<FloatPixel>(path, dimensions))
+                {
+                    FloatPixel pixel = outputRaster.BufferPixel;
+                    foreach (Site site in ModelCore.Landscape.AllSites)
+                    {
+                        if (site.IsActive)
+                        {
+                            pixel.MapCode.Value = SiteVars.EdgeModifer[site];
 
                         }
                         else
