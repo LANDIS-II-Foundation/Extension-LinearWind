@@ -14,7 +14,7 @@ namespace Landis.Extension.LinearWind
     {
         //private static RelativeLocation[] neighborhood;
         //private static IEventParameters[] windEventParms;
-        private static List<ISeverity> severities;
+        private static Dictionary<byte,ISeverityTable> severities;
 
         private ActiveSite initiationSite;
         private Site endSite;
@@ -189,6 +189,14 @@ namespace Landis.Extension.LinearWind
             }
         }
         //---------------------------------------------------------------------
+        public Dictionary<byte, ISeverityTable> Severities
+        {
+            get
+            {
+                return severities;
+            }
+        }
+        //---------------------------------------------------------------------
         ExtensionType IDisturbance.Type
         {
             get {
@@ -205,7 +213,7 @@ namespace Landis.Extension.LinearWind
         }
         //---------------------------------------------------------------------
         
-        public static void Initialize(List<ISeverity> severities)
+        public static void Initialize(Dictionary<byte,ISeverityTable> severities)
         {
             Event.severities = severities;
         }
@@ -440,7 +448,10 @@ namespace Landis.Extension.LinearWind
             {
                 siteIntensity = SiteVars.Intensity[site];
                 siteSeverity = 0;
-                KillSiteCohorts(site);
+                if (siteIntensity > 0)
+                {
+                    KillSiteCohorts(site);
+                }
                 if (siteSeverity > 0)
                 {
                     SiteVars.Event[site] = this;
@@ -471,18 +482,39 @@ namespace Landis.Extension.LinearWind
         //---------------------------------------------------------------------
         bool ICohortDisturbance.MarkCohortForDeath(ICohort cohort)
         {
-            float ageAsPercent = cohort.Age / (float) cohort.Species.Longevity;
-            foreach (ISeverity severity in severities)
+
+            byte speciesSensitivity = SpeciesData.WindSensitivity[cohort.Species];
+            //float ageAsPercent = cohort.Age / (float) cohort.Species.Longevity;
+            for (byte severityClass = 5; severityClass > 0; severityClass--)
             {
-                if(ageAsPercent >= severity.MinAge && ageAsPercent <= severity.MaxAge)
+                ISeverityTable severityRow = this.Severities[severityClass];
+                float lowAge = 0;
+                float highAge = 0;
+                if (speciesSensitivity == 1)
                 {
-                    if (siteIntensity > severity.MortalityThreshold) {
-                       
+                    lowAge = severityRow.Group1Low;
+                    highAge = severityRow.Group1High;
+                }
+                else if (speciesSensitivity == 2)
+                {
+                    lowAge = severityRow.Group2Low;
+                    highAge = severityRow.Group2High;
+                }
+                else if (speciesSensitivity == 3)
+                {
+                    lowAge = severityRow.Group3Low;
+                    highAge = severityRow.Group3High;
+                }
+                if (cohort.Age >= lowAge && cohort.Age <= highAge)
+                {
+
+                    if (siteIntensity > severityRow.MortalityThreshold)
+                    {
                         cohortsKilled++;
-                        if (severity.Number > siteSeverity)
-                            siteSeverity = severity.Number;
+                        if (severityClass > siteSeverity)
+                            siteSeverity = severityClass;
                         //UI.WriteLine("  cohort {0}:{1} killed, severity {2}", cohort.Species.Name, cohort.Age, severity.Number);
-                        return true;
+                        return true;                        
                     }
                     break;  // No need to search further in the table
                 }

@@ -77,8 +77,8 @@ namespace Landis.Extension.LinearWind
             //tolwMapNameTemplate = "linearwind/tolw-{timestep}.img";
 
             SiteVars.Initialize();
-
-            Event.Initialize(parameters.WindSeverities);
+            SpeciesData.Initialize(parameters);
+            Event.Initialize(parameters.SeverityDictionary);
 
             //ModelCore.UI.WriteLine("   Opening wind log file \"{0}\" ...", parameters.LogFileName);
             //log = Landis.Data.CreateTextFile(parameters.LogFileName);

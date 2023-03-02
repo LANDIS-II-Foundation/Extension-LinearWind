@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <RootNamespace>Landis.Extension.LinearWind</RootNamespace>
-    <AssemblyName>Landis.Extension.LinearWind-v2</AssemblyName>
-    <AssemblyTitle>Landis.Extension.LinearWind-v2</AssemblyTitle>
+    <AssemblyName>Landis.Extension.LinearWind-v3</AssemblyName>
+    <AssemblyTitle>Landis.Extension.LinearWind-v3</AssemblyTitle>
     <AssemblyCompany>Landis-II-Foundation</AssemblyCompany>
-    <AssemblyProduct>Landis.Extension.LinearWind-v2</AssemblyProduct>
+    <AssemblyProduct>Landis.Extension.LinearWind-v3</AssemblyProduct>
     <AssemblyCopyright>Landis-II-Foundation</AssemblyCopyright>
-    <AssemblyVersion>2.1</AssemblyVersion>
+    <AssemblyVersion>3.0</AssemblyVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/LANDIS-II-Foundation/Extension-LinearWind</RepositoryUrl>
@@ -16,13 +16,13 @@
     <PackageProjectUrl>http://www.landis-ii.org</PackageProjectUrl>
     <NeutralLanguage>English</NeutralLanguage>
     <Authors>Landis-II-Foundation</Authors>
-    <Product>Landis.Extension.LinearWind-v2</Product>
+    <Product>Landis.Extension.LinearWind-v3</Product>
     <Copyright>Landis-II-Foundation</Copyright>
-    <Version>2.1</Version>
+    <Version>3.0</Version>
     <PackageTags>LANDIS-II;Landis;Extension;Linear Wind</PackageTags>
     <Description></Description>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <FileVersion>2.1</FileVersion>
+    <FileVersion>3.0</FileVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -42,6 +42,9 @@
     </Reference>
     <Reference Include="Landis.Library.Metadata-v2">
       <HintPath>..\..\Support-Library-Dlls-v7\Landis.Library.Metadata-v2.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.Parameters-v2">
+      <HintPath>..\..\Support-Library-Dlls-v7\Landis.Library.Parameters-v2.dll</HintPath>
     </Reference>
   </ItemGroup>
  

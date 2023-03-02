@@ -46,7 +46,7 @@ namespace Landis.Extension.LinearWind
 	/// <summary>
 	/// Definition of a wind severity.
 	/// </summary>
-	public class Severity
+	public class Severity_Old
 		: ISeverity
 	{
 		private byte number;
@@ -149,7 +149,7 @@ namespace Landis.Extension.LinearWind
 
         //---------------------------------------------------------------------
 
-        public Severity()
+        public Severity_Old()
         {
         }
 

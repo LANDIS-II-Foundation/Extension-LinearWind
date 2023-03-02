@@ -22,7 +22,7 @@ CellLength  100 << meters, 100 x 100 m = 1 ha
 >> Disturbance Extensions   Initialization File
 >> ----------------------   -------------------
 >>   "Base Wind"			base-wind.txt
-   "Linear Wind"		LinearWind_Input.txt
+   "Linear Wind"		LinearWind_Input_withSeverity.txt
 
 >>   DisturbancesRandomOrder  yes  << optional parameter; default = no
 

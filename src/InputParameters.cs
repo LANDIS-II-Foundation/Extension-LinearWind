@@ -2,6 +2,8 @@
 
 using Landis.Utilities;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Landis.Core;
 
 namespace Landis.Extension.LinearWind
 {
@@ -34,7 +36,9 @@ namespace Landis.Extension.LinearWind
         private float maxDistanceToEdge;
         private float maxAgeEdge;
         private float maxEdgeEffect;
-        private List<ISeverity> severities;
+        //private List<ISeverity> severities;
+        private Dictionary<byte,ISeverityTable> severityDictionary;
+        private Library.Parameters.Species.AuxParm<byte> windSensitivity;
 
         private string mapNamesTemplate;
         private string intensityMapNamesTemplate;
@@ -352,7 +356,7 @@ namespace Landis.Extension.LinearWind
             }
         }
         //---------------------------------------------------------------------
-        /// <summary>
+       /* /// <summary>
         /// Definitions of wind severities.
         /// </summary>
         public List<ISeverity> WindSeverities
@@ -360,12 +364,31 @@ namespace Landis.Extension.LinearWind
 			get {
 				return severities;
 			}
-		}
-		//---------------------------------------------------------------------
-		/// <summary>
-		/// Template for the filenames for severity output maps.
-		/// </summary>
-		public string MapNamesTemplate
+		}*/
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Definitions of wind severities.
+        /// </summary>
+        public Dictionary<byte, ISeverityTable> SeverityDictionary
+        {
+            get
+            {
+                return severityDictionary;
+            }
+        }
+        //---------------------------------------------------------------------
+        public Library.Parameters.Species.AuxParm<byte> WindSensitivity
+        {
+            get
+            {
+                return windSensitivity;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Template for the filenames for severity output maps.
+        /// </summary>
+        public string MapNamesTemplate
 		{
 			get {
 				return mapNamesTemplate;
@@ -423,17 +446,39 @@ namespace Landis.Extension.LinearWind
             }
 		}
         //---------------------------------------------------------------------
-
+       
+        public void SetWMT(byte index, double newValue)
+        {
+            severityDictionary[index].MortalityThreshold = (float)newValue;
+        }
+        //---------------------------------------------------------------------
+        public void SetWindSensitivity(ISpecies species,
+                     byte newValue)
+        {
+            Debug.Assert(species != null);
+            windSensitivity[species] = VerifyRange((int)newValue, 1, 5);
+        }
+        //---------------------------------------------------------------------
         public InputParameters(int ecoregionCount)
         {
-            severities = new List<ISeverity>();
+            //severities = new List<ISeverity>();
+            severityDictionary = new Dictionary<byte, ISeverityTable>();
             windDirPct = new List<double>(4);
             tornadoWindIntPct = new List<double>(5);
             derechoWindIntPct = new List<double>(5);
+            windSensitivity = new Landis.Library.Parameters.Species.AuxParm<byte>(PlugIn.ModelCore.Species);
             EcoParameters = new IEcoParameters[ecoregionCount];
             for (int i = 0; i < ecoregionCount; i++)
                 EcoParameters[i] = new EcoParameters();
         }
-		//---------------------------------------------------------------------
-	}
+        //---------------------------------------------------------------------
+        public static byte VerifyRange(int newValue, int minValue, int maxValue)
+        {
+            if (newValue < minValue || newValue > maxValue)
+                throw new InputValueException(newValue.ToString(),
+                                              "{0} is not between {1:0.0} and {2:0.0}",
+                                              newValue.ToString(), minValue, maxValue);
+            return (byte)newValue;
+        }
+    }
 }

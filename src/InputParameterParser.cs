@@ -4,6 +4,7 @@ using Landis.Utilities;
 using Landis.Core;
 using System.Collections.Generic;
 using System.Text;
+using System.Data;
 
 namespace Landis.Extension.LinearWind
 {
@@ -219,27 +220,45 @@ namespace Landis.Extension.LinearWind
                 parameters.MaxEdgeEffect = maxEdgeEffect.Value;
             }
             //  Read table of wind severities.
-            //  Severities are in decreasing order.
-            ReadName(WindSeverities);
+            InputVar<string> severityInputFile = new InputVar<string>("WindSeverityFile");
+            ReadVar(severityInputFile);
+            CSVParser severityParser = new CSVParser();
+            DataTable severityTable = severityParser.ParseToDataTable(severityInputFile.Value);
 
-            InputVar<byte> number = new InputVar<byte>("Severity Number");
-            InputVar<Percentage> minAge = new InputVar<Percentage>("Min Age");
-            InputVar<Percentage> maxAge = new InputVar<Percentage>("Max Age");
-            InputVar<float> mortalityThreshold = new InputVar<float>("Mortality Threshold");
+            foreach (DataRow row in severityTable.Rows)
+            {
+                byte severityIndex = System.Convert.ToByte(row["WindSeverityClass"]);
+                ISeverityTable severityRow = new SeverityTable();
+                severityRow.MortalityThreshold = (float)System.Convert.ToDouble(row["WMT"]);
+                severityRow.Group1Low = (float)System.Convert.ToDouble(row["Group1Low"]);
+                severityRow.Group1High = (float)System.Convert.ToDouble(row["Group1High"]);
+                severityRow.Group2Low = (float)System.Convert.ToDouble(row["Group2Low"]);
+                severityRow.Group2High = (float)System.Convert.ToDouble(row["Group2High"]);
+                severityRow.Group3Low = (float)System.Convert.ToDouble(row["Group3Low"]);
+                severityRow.Group3High = (float)System.Convert.ToDouble(row["Group3High"]);
+                parameters.SeverityDictionary.Add(severityIndex, severityRow);
+            }
+            //  Read table of  species wind sensitivities.
+            InputVar<string> sensitivityInputFile = new InputVar<string>("SpeciesWindSensitivityFile");
+            ReadVar(sensitivityInputFile);
+            CSVParser sensitivityParser = new CSVParser();
+            DataTable sensitivityTable = sensitivityParser.ParseToDataTable(sensitivityInputFile.Value);
 
+            foreach (DataRow row in sensitivityTable.Rows)
+            {
+                ISpecies species = ReadSpecies(System.Convert.ToString(row["Species"]));
+                parameters.SetWindSensitivity(species, System.Convert.ToByte(row["WindSensitivity"]));
+            }
 
-            const string EdgeMapNames = "EdgeMapNames";
-            const string IntensityMapNames = "IntensityMapNames";
-            const string SeverityMapNames = "SeverityMapNames";
             const string LogFile = "LogFile";
             byte previousNumber = 6;
             Percentage previousMaxAge = null;
-
+            /*
             while (!AtEndOfInput && CurrentName != EdgeMapNames && CurrentName != SeverityMapNames && CurrentName != IntensityMapNames && CurrentName != LogFile && previousNumber != 1)
             {
                 StringReader currentLine = new StringReader(CurrentLine);
 
-                ISeverity severity = new Severity();
+                ISeverity severity = new Severity_Old();
                 parameters.WindSeverities.Add(severity);
 
                 ReadValue(number, currentLine);
@@ -305,6 +324,11 @@ namespace Landis.Extension.LinearWind
                 throw NewParseException("No severities defined.");
             if (previousNumber != 1)
                 throw NewParseException("Expected wind severity {0}", previousNumber - 1);
+            */
+
+            const string EdgeMapNames = "EdgeMapNames";
+            const string IntensityMapNames = "IntensityMapNames";
+            const string SeverityMapNames = "SeverityMapNames";
 
             InputVar<string> edgeMapNames = new InputVar<string>(EdgeMapNames);
             if (ReadOptionalVar(edgeMapNames))
@@ -332,5 +356,15 @@ namespace Landis.Extension.LinearWind
 
             return parameters; //.GetComplete();
         }
+        private ISpecies ReadSpecies(string speciesName)
+        {
+            ISpecies species = PlugIn.ModelCore.Species[speciesName.Trim()];
+            if (species == null)
+                throw new InputValueException(speciesName,
+                                              "{0} is not a species name.",
+                                              speciesName);
+            return species;
+        }
+
     }
 }

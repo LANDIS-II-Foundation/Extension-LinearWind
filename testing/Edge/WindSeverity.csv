@@ -1,4 +1,4 @@
-WindSeverityClass,WMT,Group1Low,Group1High,Group2Low,Group2High,Group3Low,Group3HIgh
+WindSeverityClass,WMT,Group1Low,Group1High,Group2Low,Group2High,Group3Low,Group3High
 5,0.95,0,20,0,20,0,30
 4,0.9,21,50,21,60,31,70
 3,0.5,51,70,61,80,71,120

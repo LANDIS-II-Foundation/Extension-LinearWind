@@ -9,29 +9,40 @@ namespace Landis.Extension.LinearWind
 	/// </summary>
 	public interface IInputParameters
 	{
-		/// <summary>
-		/// Timestep (years)
-		/// </summary>
-		int Timestep
+
+        Landis.Library.Parameters.Species.AuxParm<byte> WindSensitivity { get; }
+
+        /// <summary>
+        /// Timestep (years)
+        /// </summary>
+        int Timestep
 		{
 			get;set;
 		}
 
 		//---------------------------------------------------------------------
-		/// <summary>
+		/*/// <summary>
 		/// Definitions of wind severities.
 		/// </summary>
 		List<ISeverity> WindSeverities
 		{
 			get;
-		}
+		}*/
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Definitions of wind severities.
+        /// </summary>
+        Dictionary<byte, ISeverityTable> SeverityDictionary
+        {
+            get;
+        }
 
-		//---------------------------------------------------------------------
+        //---------------------------------------------------------------------
 
-		/// <summary>
-		/// Template for the filenames for severity output maps.
-		/// </summary>
-		string MapNamesTemplate
+        /// <summary>
+        /// Template for the filenames for severity output maps.
+        /// </summary>
+        string MapNamesTemplate
 		{
 			get;set;
 		}

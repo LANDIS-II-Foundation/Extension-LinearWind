@@ -53,28 +53,8 @@ MaxDistanceToEdge	150
 MaxAgeEdge		20
 MaxEdgeEffect		1
 
-WindSeverities				
-WindSeverity.csv
-
-SpeciesWindSensitivity
-abiebals     3
-acerrubr    2 
-acersacc   3  
-betualle    3 
-betupapy    1 
-fraxamer    2 
-piceglau    3 
-pinubank    1 
-pinuresi    2 
-pinustro    2
-poputrem    1 
-querelli     2
-querrubr     2
-thujocci     3
-tiliamer     2
-tsugcana     3
-
-
+WindSeverityFile WindSeverity.csv
+SpeciesWindSensitivityFile SpeciesWindSensitivity.csv
 
 EdgeMapNames	linearwind/edge-{timestep}.img
 IntensityMapNames  linearwind/intensity-{timestep}.img
