@@ -224,18 +224,25 @@ namespace Landis.Extension.LinearWind
             ReadVar(severityInputFile);
             CSVParser severityParser = new CSVParser();
             DataTable severityTable = severityParser.ParseToDataTable(severityInputFile.Value);
+            int severityColumns = severityTable.Columns.Count;
+            int numberGroups = (severityColumns - 2) / 2;
 
             foreach (DataRow row in severityTable.Rows)
             {
                 byte severityIndex = System.Convert.ToByte(row["WindSeverityClass"]);
-                ISeverityTable severityRow = new SeverityTable();
+                ISeverity severityRow = new Severity();
                 severityRow.MortalityThreshold = (float)System.Convert.ToDouble(row["WMT"]);
-                severityRow.Group1Low = (float)System.Convert.ToDouble(row["Group1Low"]);
-                severityRow.Group1High = (float)System.Convert.ToDouble(row["Group1High"]);
-                severityRow.Group2Low = (float)System.Convert.ToDouble(row["Group2Low"]);
-                severityRow.Group2High = (float)System.Convert.ToDouble(row["Group2High"]);
-                severityRow.Group3Low = (float)System.Convert.ToDouble(row["Group3Low"]);
-                severityRow.Group3High = (float)System.Convert.ToDouble(row["Group3High"]);
+                Dictionary<int, List<float>> severityDict = new Dictionary<int, List<float>>();
+                for (int group = 1; group <= numberGroups; group++)
+                {
+                    string nameLow = "Group" + group + "Low";
+                    string nameHigh = "Group" + group + "High";
+                    float lowValue = (float)System.Convert.ToDouble(row[nameLow]);
+                    float highValue = (float)System.Convert.ToDouble(row[nameHigh]);
+                    List<float> valueList = new List<float> { lowValue, highValue };
+                    severityDict.Add(group, valueList);                    
+                }
+                severityRow.GroupValues = severityDict;
                 parameters.SeverityDictionary.Add(severityIndex, severityRow);
             }
             //  Read table of  species wind sensitivities.
@@ -247,7 +254,15 @@ namespace Landis.Extension.LinearWind
             foreach (DataRow row in sensitivityTable.Rows)
             {
                 ISpecies species = ReadSpecies(System.Convert.ToString(row["Species"]));
-                parameters.SetWindSensitivity(species, System.Convert.ToByte(row["WindSensitivity"]));
+                byte windSensitivity = System.Convert.ToByte(row["WindSensitivity"]);
+                if (parameters.SeverityDictionary[1].GroupValues.ContainsKey(windSensitivity))
+                {
+                    parameters.SetWindSensitivity(species, windSensitivity);
+                }
+                else
+                {
+                    throw new InputValueException(windSensitivity.ToString(), "WindSensitivity "+windSensitivity+" for species "+species.Name+", but no Group"+windSensitivity+ " in WindSeverityFile.");
+                }
             }
 
             const string LogFile = "LogFile";

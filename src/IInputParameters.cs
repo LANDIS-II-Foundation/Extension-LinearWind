@@ -32,7 +32,7 @@ namespace Landis.Extension.LinearWind
         /// <summary>
         /// Definitions of wind severities.
         /// </summary>
-        Dictionary<byte, ISeverityTable> SeverityDictionary
+        Dictionary<byte, ISeverity> SeverityDictionary
         {
             get;
         }

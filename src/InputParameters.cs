@@ -37,7 +37,7 @@ namespace Landis.Extension.LinearWind
         private float maxAgeEdge;
         private float maxEdgeEffect;
         //private List<ISeverity> severities;
-        private Dictionary<byte,ISeverityTable> severityDictionary;
+        private Dictionary<byte,ISeverity> severityDictionary;
         private Library.Parameters.Species.AuxParm<byte> windSensitivity;
 
         private string mapNamesTemplate;
@@ -369,7 +369,7 @@ namespace Landis.Extension.LinearWind
         /// <summary>
         /// Definitions of wind severities.
         /// </summary>
-        public Dictionary<byte, ISeverityTable> SeverityDictionary
+        public Dictionary<byte, ISeverity> SeverityDictionary
         {
             get
             {
@@ -462,7 +462,7 @@ namespace Landis.Extension.LinearWind
         public InputParameters(int ecoregionCount)
         {
             //severities = new List<ISeverity>();
-            severityDictionary = new Dictionary<byte, ISeverityTable>();
+            severityDictionary = new Dictionary<byte, ISeverity>();
             windDirPct = new List<double>(4);
             tornadoWindIntPct = new List<double>(5);
             derechoWindIntPct = new List<double>(5);

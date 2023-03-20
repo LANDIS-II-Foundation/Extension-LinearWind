@@ -14,7 +14,7 @@ namespace Landis.Extension.LinearWind
     {
         //private static RelativeLocation[] neighborhood;
         //private static IEventParameters[] windEventParms;
-        private static Dictionary<byte,ISeverityTable> severities;
+        private static Dictionary<byte,ISeverity> severities;
 
         private ActiveSite initiationSite;
         private Site endSite;
@@ -189,7 +189,7 @@ namespace Landis.Extension.LinearWind
             }
         }
         //---------------------------------------------------------------------
-        public Dictionary<byte, ISeverityTable> Severities
+        public Dictionary<byte, ISeverity> Severities
         {
             get
             {
@@ -213,7 +213,7 @@ namespace Landis.Extension.LinearWind
         }
         //---------------------------------------------------------------------
         
-        public static void Initialize(Dictionary<byte,ISeverityTable> severities)
+        public static void Initialize(Dictionary<byte,ISeverity> severities)
         {
             Event.severities = severities;
         }
@@ -487,10 +487,14 @@ namespace Landis.Extension.LinearWind
             //float ageAsPercent = cohort.Age / (float) cohort.Species.Longevity;
             for (byte severityClass = 5; severityClass > 0; severityClass--)
             {
-                ISeverityTable severityRow = this.Severities[severityClass];
+                ISeverity severityRow = this.Severities[severityClass];
                 float lowAge = 0;
                 float highAge = 0;
-                if (speciesSensitivity == 1)
+
+                lowAge = severityRow.GroupValues[speciesSensitivity][0];
+                highAge = severityRow.GroupValues[speciesSensitivity][1];
+
+                /*if (speciesSensitivity == 1)
                 {
                     lowAge = severityRow.Group1Low;
                     highAge = severityRow.Group1High;
@@ -504,7 +508,7 @@ namespace Landis.Extension.LinearWind
                 {
                     lowAge = severityRow.Group3Low;
                     highAge = severityRow.Group3High;
-                }
+                }*/
                 if (cohort.Age >= lowAge && cohort.Age <= highAge)
                 {
 

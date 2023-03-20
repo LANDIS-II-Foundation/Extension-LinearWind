@@ -8,7 +8,7 @@ namespace Landis.Extension.LinearWind
     /// <summary>
     /// Definition of a wind severity.
     /// </summary>
-    public interface ISeverity
+    public interface ISeverity_Old
     {
         /// <summary>
         /// The range of cohort ages (as % of species longevity) that the
@@ -47,7 +47,7 @@ namespace Landis.Extension.LinearWind
 	/// Definition of a wind severity.
 	/// </summary>
 	public class Severity_Old
-		: ISeverity
+		: ISeverity_Old
 	{
 		private byte number;
 		//private Range<double> ageRange;

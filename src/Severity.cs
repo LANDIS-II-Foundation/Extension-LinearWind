@@ -8,15 +8,16 @@ namespace Landis.Extension.LinearWind
     /// <summary>
     /// Definition of a wind severity.
     /// </summary>
-    public interface ISeverityTable
+    public interface ISeverity
     {
-        float Group1Low { get; set; }
+        /*float Group1Low { get; set; }
         float Group1High { get; set; }
         float Group2Low { get; set; }
         float Group2High { get; set; }
         float Group3Low { get; set; }
         float Group3High { get; set; }
-
+        */
+        Dictionary<int,List<float>> GroupValues { get; set; }
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -37,16 +38,17 @@ namespace Landis.Extension.LinearWind
     }
 
 
-    public class SeverityTable
-     : ISeverityTable
+    public class Severity
+     : ISeverity
     {
         private byte index;
-        private float group1Low;
+        /*private float group1Low;
         private float group1High;
         private float group2Low;
         private float group2High;
         private float group3Low;
-        private float group3High;
+        private float group3High;*/
+        private Dictionary<int, List<float>> groupValues;
         private float mortalityThreshold;
 
         //---------------------------------------------------------------------
@@ -83,7 +85,7 @@ namespace Landis.Extension.LinearWind
                 mortalityThreshold = value;
             }
         }
-        public float Group1Low
+        /*public float Group1Low
         {
             get
             {
@@ -147,6 +149,17 @@ namespace Landis.Extension.LinearWind
             set
             {
                 group3High = value;
+            }
+        }*/
+        public Dictionary<int,List<float>> GroupValues
+        {
+            get
+            {
+                return groupValues;
+            }
+            set
+            {
+                groupValues = value;
             }
         }
     }
