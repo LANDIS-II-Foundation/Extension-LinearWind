@@ -306,7 +306,7 @@ namespace Landis.Extension.LinearWind
 
             CheckNoDataAfter(string.Format("the {0} parameter", logFile.Name));
 
-            return parameters; //.GetComplete();
+            return parameters; 
         }
     }
 }

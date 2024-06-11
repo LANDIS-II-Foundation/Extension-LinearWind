@@ -8,7 +8,6 @@ namespace Landis.Extension.LinearWind
 {
     public class EventsLog
     {
-        //log.WriteLine("Time,Initiation Site,Total Sites,Damaged Sites,Cohorts Killed,Mean Severity");
 
         [DataFieldAttribute(Unit = FieldUnits.Year, Desc = "...")]
         public int Time {set; get;}

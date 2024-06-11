@@ -3,9 +3,6 @@
 using Landis.SpatialModeling;
 using Landis.Core;
 using Landis.Library.Metadata;
-using System.Collections.Generic;
-using System.IO;
-using System;
 
 namespace Landis.Extension.LinearWind
 {
@@ -43,6 +40,10 @@ namespace Landis.Extension.LinearWind
             {
                 return modelCore;
             }
+        }
+        public override void AddCohortData()
+        {
+            return;
         }
         //---------------------------------------------------------------------
 

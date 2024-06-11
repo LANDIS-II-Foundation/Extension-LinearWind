@@ -2,7 +2,7 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Library.AgeOnlyCohorts;
+using Landis.Library.UniversalCohorts;
 using System;
 
 using System.Collections.Generic;
@@ -10,10 +10,8 @@ using System.Collections.Generic;
 namespace Landis.Extension.LinearWind
 {
     public class Event
-        : ICohortDisturbance
+        : IDisturbance
     {
-        //private static RelativeLocation[] neighborhood;
-        //private static IEventParameters[] windEventParms;
         private static List<ISeverity> severities;
 
         private ActiveSite initiationSite;
@@ -254,9 +252,6 @@ namespace Landis.Extension.LinearWind
             double dirRandomizer = (randomUnif * 2.0) - 1.0;  // Random between -1 and 1
             double dirRad = 0.25 * (double)modWindDirection * System.Math.PI + (dirRandomizer * 0.125 * System.Math.PI);  // Cardinal direction +/- 1/8 *PI
             List<int> endLocation = GetEndLocation(initiationSite, eventLength, dirRad);
-            //double dirRadOrig = 0.25 * (double)eventDirection * System.Math.PI + (dirRandomizer * 0.125 * System.Math.PI); 
-            //double dirAzimuth = dirRad * 180 / Math.PI;
-            //this.windDirection = (int)dirAzimuth;
 
             this.endRow = endLocation[0];
             this.endCol = endLocation[1];
@@ -373,12 +368,12 @@ namespace Landis.Extension.LinearWind
         //---------------------------------------------------------------------
         private void KillSiteCohorts(ActiveSite site)
         {
-            SiteVars.Cohorts[site].RemoveMarkedCohorts(this);
+            SiteVars.Cohorts[site].ReduceOrKillCohorts(this);
         }
         //---------------------------------------------------------------------
-        bool ICohortDisturbance.MarkCohortForDeath(ICohort cohort)
+        int IDisturbance.ReduceOrKillMarkedCohort(ICohort cohort)
         {
-            float ageAsPercent = cohort.Age / (float) cohort.Species.Longevity;
+            float ageAsPercent = cohort.Data.Age / (float) cohort.Species.Longevity;
             foreach (ISeverity severity in severities)
             {
                 if(ageAsPercent >= severity.MinAge && ageAsPercent <= severity.MaxAge)
@@ -388,13 +383,12 @@ namespace Landis.Extension.LinearWind
                         cohortsKilled++;
                         if (severity.Number > siteSeverity)
                             siteSeverity = severity.Number;
-                        //UI.WriteLine("  cohort {0}:{1} killed, severity {2}", cohort.Species.Name, cohort.Age, severity.Number);
-                        return true;
+                        return cohort.Data.Biomass;
                     }
                     break;  // No need to search further in the table
                 }
             }
-            return false;
+            return 0;
         }
         //---------------------------------------------------------------------
         public static int GetWindDirection(List<double> windDirPct)

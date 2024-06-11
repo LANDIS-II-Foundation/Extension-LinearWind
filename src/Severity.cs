@@ -50,7 +50,6 @@ namespace Landis.Extension.LinearWind
 		: ISeverity
 	{
 		private byte number;
-		//private Range<double> ageRange;
         private double minAge;
         private double maxAge;
 		private float mortalityThreshold;
@@ -110,18 +109,6 @@ namespace Landis.Extension.LinearWind
                 maxAge = value;
             }
         }
-		//---------------------------------------------------------------------
-
-		/// <summary>
-		/// The range of cohort ages (as % of species longevity) that the
-		/// severity applies to.
-		/// </summary>
-		/*public Range<double> AgeRange
-		{
-			get {
-				return ageRange;
-			}
-		}*/
 
         //---------------------------------------------------------------------
 
