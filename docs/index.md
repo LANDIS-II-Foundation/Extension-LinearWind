@@ -1,32 +1,29 @@
 # What is the Linear Wind Extension?
 
-The Linear Wind extension generates linear wind events such as tornadoes and derechos, and is loosely based on the Base Wind extension, primarily differing in the shape of wind events and producing variability in wind speed within wind events. The extension can simulate both derechos and tornadoes in the same time step. Micro-bursts and other wind events that typically produce more circular patterns of disturbance are more simply simulated using the Base Wind extension.
+The Linear Wind extension generates linear wind events such as tornadoes and derechos, and is loosely based on the Original Wind extension, primarily differing in the shape of wind events and producing variability in wind speed within wind events. The extension can simulate both derechos and tornadoes in the same time step. Micro-bursts and other wind events that typically produce more circular patterns of disturbance are more simply simulated using the Base Wind extension.
 
 # Release Notes
 
-- Latest release: Version 2.0, September 2018
-- [View User Guide](https://github.com/LANDIS-II-Foundation/Extension-LinearWind/blob/master/docs/LANDIS-II%20Linear%20Wind%20v2.0%20User%20Guide.pdf).
-
+- Latest release: Version 3.0, August 2024
+- [View User Guide](https://github.com/LANDIS-II-Foundation/Extension-LinearWind/blob/master/docs/LANDIS-II%20Linear%20Wind%20v3%20User%20Guide.pdf).
 - Full release details found in the User Guide and on GitHub.
-
 - Copyright: The LANDIS-II Foundation
 
 # Requirements
 
-To use Linear Wind, you need:
+You need:
 
-- The [LANDIS-II model v7.0](http://www.landis-ii.org/install) installed on your computer.
+- The [LANDIS-II model v8.0](http://www.landis-ii.org/install) installed on your computer.
+- Extension Installer
 - Example files (see below)
 
-# Download
+# Download and Run the Extension Installer
 
-- The latest version of Linear Wind can be [downloaded from GitHub](https://github.com/LANDIS-II-Foundation/Extension-LinearWind/blob/master/deploy/installer/LANDIS-II-V7%20Linear%20Wind%202.0-setup.exe). To install it on your computer, launch the installer.
+- The latest version can be [downloaded from GitHub](https://github.com/LANDIS-II-Foundation/Extension-LinearWind/blob/master/deploy/installer/LANDIS-II-V8%20Linear%20Wind%203.0-setup.exe). (Look for the download icon in the upper right corner.)  Launch the installer.
 
 # Example Files
 
-LANDIS-II requires a global parameter file for your scenario, and separate parameter files for each extension.
-
-Example files can be [downloaded from GitHub](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-LinearWind/blob/master/testing/Core7-LinearWind2.0).
+Example files can be [downloaded from GitHub](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-LinearWind/blob/master/testing/Core8-LinearWind3.0).
 
 # Citation
 
