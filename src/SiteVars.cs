@@ -2,7 +2,7 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Library.AgeOnlyCohorts;
+using Landis.Library.UniversalCohorts;
 using System;
 
 namespace Landis.Extension.LinearWind
@@ -21,11 +21,11 @@ namespace Landis.Extension.LinearWind
         public static void Initialize()
         {
             eventVar        = PlugIn.ModelCore.Landscape.NewSiteVar<Event>(InactiveSiteMode.DistinctValues);
+            cohorts = PlugIn.ModelCore.GetSiteVar<ISiteCohorts>("Succession.UniversalCohorts");
 
             disturbed = PlugIn.ModelCore.Landscape.NewSiteVar<bool>();
             timeOfLastEvent = PlugIn.ModelCore.GetSiteVar<int>("Wind.TimeOfLastEvent");  // If other wind disturbance extension is active, use the registered site var from it
             severity = PlugIn.ModelCore.GetSiteVar<byte>("Wind.Severity");  // If other wind disturbance extension is active, use the registered site var from it
-            cohorts = PlugIn.ModelCore.GetSiteVar<ISiteCohorts>("Succession.AgeCohorts");
             if (timeOfLastEvent == null)
             {
                 timeOfLastEvent = PlugIn.ModelCore.Landscape.NewSiteVar<int>();

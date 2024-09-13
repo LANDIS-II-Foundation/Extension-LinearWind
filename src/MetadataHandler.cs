@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Landis.Library.Metadata;
-using Landis.Utilities;
+﻿using Landis.Library.Metadata;
 using Landis.Core;
 
 namespace Landis.Extension.LinearWind
