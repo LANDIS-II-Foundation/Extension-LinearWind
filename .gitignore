@@ -240,3 +240,7 @@ testing/Core8-LinearWind3.0/Metadata/Climate-Library/Climate-Library.xml
 testing/Core8-LinearWind3.0/Metadata/Climate-Library/Annual-Log_Metadata.xml
 testing/Core8-LinearWind3.0/Metadata/Biomass Succession/SummaryLog_Metadata.xml
 testing/Core8-LinearWind3.0/Metadata/Biomass Succession/Biomass Succession.xml
+testing/Core8-LinearWind3.0/Climate-future-annual-log.csv
+testing/Core8-LinearWind3.0/Climate-spinup-annual-log.csv
+testing/Core8-LinearWind3.0/Metadata/Climate-Library/Future-Annual-Log_Metadata.xml
+testing/Core8-LinearWind3.0/Metadata/Climate-Library/Spinup-Annual-Log_Metadata.xml

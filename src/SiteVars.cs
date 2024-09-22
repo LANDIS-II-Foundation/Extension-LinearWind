@@ -13,7 +13,7 @@ namespace Landis.Extension.LinearWind
         private static ISiteVar<int> timeOfLastEvent;
         private static ISiteVar<byte> severity;
         private static ISiteVar<bool> disturbed;
-        private static ISiteVar<ISiteCohorts> cohorts;
+        private static ISiteVar<SiteCohorts> cohorts;
         private static ISiteVar<double> intensity;
 
         //---------------------------------------------------------------------
@@ -21,7 +21,7 @@ namespace Landis.Extension.LinearWind
         public static void Initialize()
         {
             eventVar        = PlugIn.ModelCore.Landscape.NewSiteVar<Event>(InactiveSiteMode.DistinctValues);
-            cohorts = PlugIn.ModelCore.GetSiteVar<ISiteCohorts>("Succession.UniversalCohorts");
+            cohorts = PlugIn.ModelCore.GetSiteVar<SiteCohorts>("Succession.UniversalCohorts");
 
             disturbed = PlugIn.ModelCore.Landscape.NewSiteVar<bool>();
             timeOfLastEvent = PlugIn.ModelCore.GetSiteVar<int>("Wind.TimeOfLastEvent");  // If other wind disturbance extension is active, use the registered site var from it
@@ -57,7 +57,7 @@ namespace Landis.Extension.LinearWind
 
         }
         //---------------------------------------------------------------------
-        public static ISiteVar<ISiteCohorts> Cohorts
+        public static ISiteVar<SiteCohorts> Cohorts
         {
             get
             {

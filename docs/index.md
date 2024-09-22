@@ -4,7 +4,7 @@ The Linear Wind extension generates linear wind events such as tornadoes and der
 
 # Release Notes
 
-- Latest release: Version 3.0, August 2024
+- Latest release: Version 3.0, September 2024
 - [View User Guide](https://github.com/LANDIS-II-Foundation/Extension-LinearWind/blob/master/docs/LANDIS-II%20Linear%20Wind%20v3%20User%20Guide.pdf).
 - Full release details found in the User Guide and on GitHub.
 - Copyright: The LANDIS-II Foundation
@@ -17,7 +17,7 @@ You need:
 - Extension Installer
 - Example files (see below)
 
-# Download and Run the Extension Installer
+# Download and Install the Extension
 
 - The latest version can be [downloaded from GitHub](https://github.com/LANDIS-II-Foundation/Extension-LinearWind/blob/master/deploy/installer/LANDIS-II-V8%20Linear%20Wind%203.0-setup.exe). (Look for the download icon in the upper right corner.)  Launch the installer.
 
