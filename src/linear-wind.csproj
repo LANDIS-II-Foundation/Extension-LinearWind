@@ -23,6 +23,7 @@
     <PackageTags>LANDIS-II;Landis;Extension;Linear Wind</PackageTags>
     <Description></Description>
     <PackageReleaseNotes></PackageReleaseNotes>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Landis.Library.UniversalCohorts-v1">
+    <Reference Include="Landis.Library.UniversalCohorts-v2">
       <HintPath>lib\Landis.Library.UniversalCohorts-v1.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Metadata-v2">

@@ -371,7 +371,7 @@ namespace Landis.Extension.LinearWind
             SiteVars.Cohorts[site].ReduceOrKillCohorts(this);
         }
         //---------------------------------------------------------------------
-        int IDisturbance.ReduceOrKillMarkedCohort(ICohort cohort)
+        double IDisturbance.ReduceOrKillMarkedCohort(ICohort cohort)
         {
             float ageAsPercent = cohort.Data.Age / (float) cohort.Species.Longevity;
             foreach (ISeverity severity in severities)
@@ -383,7 +383,9 @@ namespace Landis.Extension.LinearWind
                         cohortsKilled++;
                         if (severity.Number > siteSeverity)
                             siteSeverity = severity.Number;
-                        return cohort.Data.Biomass;
+                        //Universal Cohorts ReduceOrKillMarkedCohort() now expects a proportion of biomass removed
+                        return 1.0; // kill entire cohort
+                        //return cohort.Data.Biomass;
                     }
                     break;  // No need to search further in the table
                 }
